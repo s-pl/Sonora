@@ -23,7 +23,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/songs/{id}', [SongController::class, 'destroy'])->name('songs.destroy');
 });
 
-// Static informational pages
+
 Route::get('/help', function () {
     return view('help');
 })->name('help');
