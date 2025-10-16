@@ -1,6 +1,6 @@
 # Sonora
 
-Sonora es una versión simple y minimalista tipo "Spotify" para subir y reproducir canciones. Interfaz en blanco/negro, responsive y sin iconos. Incluye autenticación (registro, login, logout) y CRUD completo para canciones (GET, POST, PUT, DELETE).
+Sonora es una versión simple y minimalista tipo "Spotify" para subir y reproducir canciones. Incluye autenticación (registro, login, logout) y CRUD completo para canciones (GET, POST, PUT, DELETE).
 
 ## Requisitos
 - PHP >= 8.3
