@@ -1,61 +1,105 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sonora
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sonora es una versión simple y minimalista tipo "Spotify" para subir y reproducir canciones. Interfaz en blanco/negro, responsive y sin iconos. Incluye autenticación (registro, login, logout) y CRUD completo para canciones (GET, POST, PUT, DELETE).
 
-## About Laravel
+## Requisitos
+- PHP >= 8.3
+- Composer
+- MySQL (o MariaDB)
+- Webserver local (Laragon, Valet, XAMPP, etc.)
+- (Opcional) Node/NPM si vas a compilar assets con Vite
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Instalación rápida (Windows / Laragon)
+1. Copia `.env.example` a `.env` y ajusta las variables:
+   - DB_CONNECTION=mysql
+   - DB_HOST=127.0.0.1
+   - DB_PORT=3306
+   - DB_DATABASE=sonora
+   - DB_USERNAME=tu_usuario
+   - DB_PASSWORD=tu_pass
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+2. Instala dependencias PHP:
+```powershell
+composer install
+```
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+3. Genera la APP key y ejecuta migraciones:
+```powershell
+php artisan key:generate
+php artisan migrate
+```
 
-## Learning Laravel
+4. Crea el enlace para acceder a archivos subidos:
+```powershell
+php artisan storage:link
+```
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+5. (Opcional) Si usas assets con Vite/NPM:
+```powershell
+npm install
+npm run dev
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+6. Arranca el servidor de desarrollo:
+```powershell
+php artisan serve --host=127.0.0.1 --port=8000
+```
+Abrir: http://127.0.0.1:8000
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Rutas principales
+- GET / -> Página de inicio (welcome)
+- Auth:
+  - GET /register, POST /register
+  - GET /login, POST /login
+  - POST /logout
+- Songs (protegidas por auth):
+  - GET /songs (lista)
+  - GET /songs/create (form subir)
+  - POST /songs (crear)
+  - GET /songs/{id} (ver)
+  - PUT /songs/{id} (actualizar)
+  - DELETE /songs/{id} (borrar)
 
-## Laravel Sponsors
+## Uso desde frontend
+- Registrar un usuario y loguearse.
+- Subir canciones desde `/songs/create`.
+- Editar / borrar desde la lista de canciones.
+- Reproductor integrado en cada tarjeta (HTML5 <audio>).
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## API (ejemplos curl)
+- Crear (multipart):
+```bash
+curl -X POST -F "title=Mi canción" -F "artist=Autor" -F "file=@/ruta/archivo.mp3" -u usuario:password http://127.0.0.1:8000/songs
+```
+- Actualizar:
+```bash
+curl -X PUT -F "title=Nuevo" -F "_method=PUT" -u usuario:password http://127.0.0.1:8000/songs/1
+```
+- Borrar:
+```bash
+curl -X DELETE -u usuario:password http://127.0.0.1:8000/songs/1
+```
 
-### Premium Partners
+## Problemas comunes
+- Error "storage link": ejecuta `php artisan storage:link` y revisa permisos en `storage` y `public/storage`.
+- Error `Class "Laravel\Pail\PailServiceProvider" not found`: ejecuta `composer update` para sincronizar dependencias (se eliminaron referencias a Sail/Pail del composer.json; lockfile debe regenerarse).
+```powershell
+composer update
+composer dump-autoload
+php artisan package:discover
+```
+- ParseError en Blade (EOF): revisa que no falten `@endsection`, `</form>` o comillas sin cerrar en `resources/views/...`.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Notas del frontend
+- Estilo minimalista en blanco/negro.
+- Sin iconos.
+- Información del usuario en el navbar (nombre / email / logout).
+- Responsive: tarjetas y reproductor adaptan tamaños.
 
-## Contributing
+## Desarrollo y testing
+- Ejecutar pruebas unitarias si existen:
+```powershell
+php artisan test
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Si surge cualquier error al seguir estos pasos, pega la salida de los comandos (`composer update`, `php artisan migrate`, logs de Laravel en storage/logs/laravel.log`) y se proporcionará una solución puntual.
