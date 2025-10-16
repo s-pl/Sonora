@@ -90,16 +90,3 @@ php artisan package:discover
 ```
 - ParseError en Blade (EOF): revisa que no falten `@endsection`, `</form>` o comillas sin cerrar en `resources/views/...`.
 
-## Notas del frontend
-- Estilo minimalista en blanco/negro.
-- Sin iconos.
-- Información del usuario en el navbar (nombre / email / logout).
-- Responsive: tarjetas y reproductor adaptan tamaños.
-
-## Desarrollo y testing
-- Ejecutar pruebas unitarias si existen:
-```powershell
-php artisan test
-```
-
-Si surge cualquier error al seguir estos pasos, pega la salida de los comandos (`composer update`, `php artisan migrate`, logs de Laravel en storage/logs/laravel.log`) y se proporcionará una solución puntual.
