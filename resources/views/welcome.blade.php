@@ -1,53 +1,76 @@
 @extends('layout')
 
-@section('content')
-<div class="min-h-screen flex items-center justify-center bg-white px-4 py-12">
-	<div class="max-w-5xl w-full">
-		<div class="flex flex-col items-center text-center">
-			<div>
-				<h1 class="text-4xl md:text-5xl font-extrabold text-black leading-tight">Sonora</h1>
-				<p class="mt-3 text-gray-600 text-lg">Sube, escucha y comparte tu música. Minimalista, rápido y fácil de usar.</p>
+@section('title','Inicio - Sonora')
 
-				<div class="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
-					<div class="p-4 bg-gray-50 border border-gray-200 rounded text-center">
-						<div class="text-sm text-gray-500">Canciones</div>
-						<div class="mt-2 text-2xl font-bold text-black">{{ \App\Models\Song::count() }}</div>
-					</div>
-					<div class="p-4 bg-gray-50 border border-gray-200 rounded text-center">
-						<div class="text-sm text-gray-500">Usuarios</div>
-						<div class="mt-2 text-2xl font-bold text-black">{{ \App\Models\User::count() }}</div>
-					</div>
-					<div class="p-4 bg-gray-50 border border-gray-200 rounded text-center">
-						<div class="text-sm text-gray-500">Última subida</div>
-						<div class="mt-2 text-sm text-gray-700">{{ optional(\App\Models\Song::latest()->first())->created_at?->diffForHumans() ?? '—' }}</div>
-					</div>
+@section('content')
+	<section class="bg-white rounded-lg shadow-sm overflow-hidden">
+		<div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-center p-8">
+			<div>
+				<h1 class="text-4xl md:text-5xl font-extrabold text-gray-900">Comparte tu música. Llega más lejos.</h1>
+				<p class="mt-4 text-gray-600 text-lg">Sube, escucha y comparte pistas en segundos. Sonora es rápido, ligero y diseñado para músicos y oyentes.</p>
+
+				<div class="mt-6 flex gap-3">
+					<a href="{{ route('songs.index') }}" class="px-5 py-2 bg-sky-600 text-white rounded-md shadow hover:bg-sky-700">Explorar canciones</a>
+					@guest
+						<a href="{{ route('register') }}" class="px-5 py-2 border rounded-md text-sky-600 border-sky-200">Registro</a>
+					@endguest
 				</div>
 
-				<div class="mt-8 max-w-3xl mx-auto">
-					<h3 class="text-lg font-semibold text-black">Últimas canciones</h3>
-					<div class="mt-4 space-y-4">
-						@foreach(\App\Models\Song::latest()->take(5)->get() as $recent)
-							<div class="border border-gray-100 rounded p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-								<div class="text-center sm:text-left">
-									<div class="font-medium text-black">{{ $recent->title }}</div>
-									<div class="text-sm text-gray-500">{{ $recent->artist }}</div>
+				<div class="mt-8 grid grid-cols-3 gap-3 max-w-sm">
+					<div class="bg-gray-50 p-4 rounded">
+						<div class="text-xs text-gray-500">Canciones</div>
+						<div class="mt-1 text-xl font-bold">{{ \App\Models\Song::count() }}</div>
+					</div>
+					<div class="bg-gray-50 p-4 rounded">
+						<div class="text-xs text-gray-500">Usuarios</div>
+						<div class="mt-1 text-xl font-bold">{{ \App\Models\User::count() }}</div>
+					</div>
+					<div class="bg-gray-50 p-4 rounded">
+						<div class="text-xs text-gray-500">Última subida</div>
+						<div class="mt-1 text-sm">{{ optional(\App\Models\Song::latest()->first())->created_at?->diffForHumans() ?? '—' }}</div>
+					</div>
+				</div>
+			</div>
+
+			<div>
+				<div class="bg-gradient-to-br from-indigo-50 to-white p-6 rounded">
+					<h3 class="text-lg font-semibold text-gray-800">Últimas canciones</h3>
+					<div class="mt-4 space-y-3">
+						@forelse(\App\Models\Song::latest()->take(6)->get() as $recent)
+							<div class="flex items-center gap-4 p-3 bg-white border rounded shadow-sm">
+								<div class="w-12 h-12 bg-indigo-50 text-indigo-600 rounded flex items-center justify-center font-semibold">♪</div>
+								<div class="flex-1 min-w-0">
+									<div class="text-sm font-medium text-gray-900 truncate">{{ $recent->title }}</div>
+									<div class="text-xs text-gray-500 truncate">{{ $recent->artist }}</div>
 								</div>
-								<div class="w-full sm:w-48">
+								<div class="w-36">
 									<audio controls class="w-full">
 										<source src="{{ asset('storage/' . $recent->file_path) }}" type="audio/mpeg">
-										Tu navegador no soporta el elemento de audio.
 									</audio>
 								</div>
 							</div>
-						@endforeach
-						@if(\App\Models\Song::count() === 0)
+						@empty
 							<div class="text-sm text-gray-500">Todavía no hay canciones. Sé el primero en subir una.</div>
-						@endif
+						@endforelse
 					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-</div>
+	</section>
+
+	<section id="features" class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+		<div class="p-6 bg-white rounded shadow-sm">
+			<h4 class="font-semibold">Sube en segundos</h4>
+			<p class="mt-2 text-sm text-gray-500">Interfaz simple para subir tus pistas y compartir enlaces.</p>
+		</div>
+		<div class="p-6 bg-white rounded shadow-sm">
+			<h4 class="font-semibold">Reproductor integrado</h4>
+			<p class="mt-2 text-sm text-gray-500">Escucha online con controles responsive.</p>
+		</div>
+		<div class="p-6 bg-white rounded shadow-sm">
+			<h4 class="font-semibold">Privacidad y control</h4>
+			<p class="mt-2 text-sm text-gray-500">Decide quién ve y descarga tus pistas.</p>
+		</div>
+	</section>
 
 @endsection

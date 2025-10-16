@@ -22,3 +22,16 @@ Route::middleware('auth')->group(function () {
     Route::put('/songs/{id}', [SongController::class, 'update'])->name('songs.update');
     Route::delete('/songs/{id}', [SongController::class, 'destroy'])->name('songs.destroy');
 });
+
+// Static informational pages
+Route::get('/help', function () {
+    return view('help');
+})->name('help');
+
+Route::get('/privacy', function () {
+    return view('privacy');
+})->name('privacy');
+
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
