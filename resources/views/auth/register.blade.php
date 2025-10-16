@@ -3,7 +3,7 @@
 @section('content')
 <div class="flex justify-center items-center min-h-screen bg-white">
     <div class="w-full max-w-md bg-white p-10 rounded-2xl shadow-xl border border-gray-200 animate-fade-in">
-        <!-- Icono eliminado -->
+     
         <h2 class="text-2xl font-extrabold mb-4 text-center text-black">Registro</h2>
         <form method="POST" action="{{ url('/register') }}" class="space-y-4">
             @csrf
