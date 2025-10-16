@@ -59,7 +59,7 @@ class SongController extends Controller
             $song->file_path = $path;
         }
         $song->save();
-        // If the request expects JSON (AJAX/API), return JSON. Otherwise redirect back to the songs list.
+      
         if ($request->wantsJson() || $request->ajax()) {
             return response()->json($song);
         }
@@ -71,7 +71,7 @@ class SongController extends Controller
     {
         $song = Song::findOrFail($id);
         $song->delete();
-        // Support AJAX/JSON responses, but for normal form submissions redirect to the songs list.
+      
         if (request()->wantsJson() || request()->ajax()) {
             return response()->json(['message' => 'Canción eliminada']);
         }
