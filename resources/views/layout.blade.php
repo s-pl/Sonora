@@ -8,7 +8,7 @@
   
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // Customize Tailwind via the play CDN
+       
         tailwind.config = {
           theme: {
             extend: {
