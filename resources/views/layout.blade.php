@@ -99,7 +99,7 @@
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="md:col-span-1">
                     <a href="/" class="flex items-center gap-3 mb-4 inline-block">
-                        <div class="w-10 h-10 rounded-md bg-gradient-to-r from-sky-500 to-indigo-600 flex items-center justify-center text-white font-bold">S</div>
+                        
                         <span class="font-semibold text-lg">Sonora</span>
                     </a>
                     <p class="text-sm text-gray-600">Plataforma ligera para subir y compartir música. Diseñada para creadores y oyentes que valoran la simplicidad.</p>
